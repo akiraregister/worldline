@@ -494,32 +494,45 @@ Leave irrelevant fields as "". Keep item field values short and make sure every 
 async function getIdToken(){try{if(_fb&&_fbUser&&_fbUser.getIdToken)return await _fbUser.getIdToken();}catch(_){}
   return null;}
 function _readMsg(data){const text=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');return {text,stop:data.stop_reason};}
-async function callAPI(messages,maxTokens){
+const _sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function callAPI(messages,maxTokens,temperature){
   const idToken=await getIdToken();
   if(idToken){
-    const res=await fetch('/.netlify/functions/anthropic',{method:'POST',
-      headers:{'content-type':'application/json','authorization':'Bearer '+idToken},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:maxTokens,messages,stream:true})});
-    if(!res.ok){const t=await res.text();throw new Error(res.status+': '+t.slice(0,200));}
-    const ct=res.headers.get('content-type')||'';
-    if(ct.indexOf('event-stream')<0||!res.body){return _readMsg(await res.json());}
-    const reader=res.body.getReader(),dec=new TextDecoder();let buf='',text='',stop='';
-    for(;;){const {done,value}=await reader.read();if(done)break;buf+=dec.decode(value,{stream:true});
-      let nl;while((nl=buf.indexOf('\n'))>=0){const line=buf.slice(0,nl);buf=buf.slice(nl+1);
-        const s=line.replace(/\r$/,'').trim();if(!s||s[0]===':'||s.indexOf('data:')!==0)continue;
-        const d=s.slice(5).trim();if(d==='[DONE]')continue;
-        let ev;try{ev=JSON.parse(d);}catch(_){continue;}
-        if(ev.type==='content_block_delta'&&ev.delta){if(ev.delta.type==='text_delta')text+=ev.delta.text||'';}
-        else if(ev.type==='message_delta'&&ev.delta&&ev.delta.stop_reason)stop=ev.delta.stop_reason;
-        else if(ev.type==='error')throw new Error((ev.error&&ev.error.message)||'stream error');
-      }}
-    return {text,stop};
+    const reqBody={model:'claude-sonnet-4-6',max_tokens:maxTokens,messages,stream:true};
+    if(typeof temperature==='number')reqBody.temperature=temperature;
+    let lastErr;
+    for(let attempt=0;attempt<3;attempt++){
+      try{
+        const res=await fetch('/.netlify/functions/anthropic',{method:'POST',
+          headers:{'content-type':'application/json','authorization':'Bearer '+idToken},
+          body:JSON.stringify(reqBody)});
+        if(!res.ok){const t=await res.text();
+          if((res.status>=500||res.status===429)&&attempt<2){lastErr=new Error(res.status+': '+t.slice(0,120));await _sleep(1500*(attempt+1));continue;}
+          throw new Error(res.status+': '+t.slice(0,200));}
+        const ct=res.headers.get('content-type')||'';
+        if(ct.indexOf('event-stream')<0||!res.body){return _readMsg(await res.json());}
+        const reader=res.body.getReader(),dec=new TextDecoder();let buf='',text='',stop='';
+        for(;;){const {done,value}=await reader.read();if(done)break;buf+=dec.decode(value,{stream:true});
+          let nl;while((nl=buf.indexOf('\n'))>=0){const line=buf.slice(0,nl);buf=buf.slice(nl+1);
+            const s=line.replace(/\r$/,'').trim();if(!s||s[0]===':'||s.indexOf('data:')!==0)continue;
+            const d=s.slice(5).trim();if(d==='[DONE]')continue;
+            let ev;try{ev=JSON.parse(d);}catch(_){continue;}
+            if(ev.type==='content_block_delta'&&ev.delta){if(ev.delta.type==='text_delta')text+=ev.delta.text||'';}
+            else if(ev.type==='message_delta'&&ev.delta&&ev.delta.stop_reason)stop=ev.delta.stop_reason;
+            else if(ev.type==='error')throw new Error((ev.error&&ev.error.message)||'stream error');
+          }}
+        return {text,stop};
+      }catch(e){if(attempt<2){lastErr=e;await _sleep(1500*(attempt+1));continue;}throw e;}
+    }
+    throw lastErr||new Error('読み取りに失敗しました');
   }
   const key=await getKey();
   if(key){
+    const body={model:"claude-sonnet-4-6",max_tokens:maxTokens,messages};
+    if(typeof temperature==='number')body.temperature=temperature;
     const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",
       headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:maxTokens,messages})});
+      body:JSON.stringify(body)});
     if(!res.ok){const t=await res.text();throw new Error(res.status+': '+t.slice(0,160));}
     return _readMsg(await res.json());
   }
@@ -542,7 +555,7 @@ function repairJson(s){
   let out=s;if(inStr)out+='"';out=out.replace(/,\s*$/,'');
   while(stack.length)out+=stack.pop();return out;
 }
-async function readSlice(b64,mime){const {text,stop}=await callAPI([{role:"user",content:[{type:"image",source:{type:"base64",media_type:mime,data:b64}},{type:"text",text:READ_PROMPT}]}],8192);const r=extractRead(text);return {marked:r.marked,items:r.items,meta:r.meta,images:r.images,truncated:stop==='max_tokens',raw:text||'',stop:stop||'',parsed:r.ok};}
+async function readSlice(b64,mime){const {text,stop}=await callAPI([{role:"user",content:[{type:"image",source:{type:"base64",media_type:mime,data:b64}},{type:"text",text:READ_PROMPT}]}],8192,0);const r=extractRead(text);return {marked:r.marked,items:r.items,meta:r.meta,images:r.images,truncated:stop==='max_tokens',raw:text||'',stop:stop||'',parsed:r.ok};}
 function parseItems(s){if(!s)return [];let t=s.replace(/```json|```/g,'').trim();const a=t.indexOf('[');if(a<0)return [];const b=t.lastIndexOf(']');let cand=b>a?t.slice(a,b+1):t.slice(a);
   try{return JSON.parse(cand);}catch(e){}try{return JSON.parse(repairJson(cand));}catch(e){}return [];}
 function extractRead(text){
