@@ -50,6 +50,56 @@ export default async (req) => {
     stream: true,
   };
   if (body.system) payload.system = body.system;
+  if (typeof body.temperature === "number") payload.temperature = body.temperature;
+
+  let ar;
+  try {
+    ar = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": key,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {
+    return j({ error: "Anthropic への接続に失敗しました。" }, 502);
+  }
+
+  if (!ar.ok) {
+    const t = await ar.text();
+    return new Response(t, { status: ar.status, headers: { "content-type": "application/json" } });
+  }
+  // 成功時は SSE ストリームをそのまま流す（データが流れ続けるのでタイムアウトしにくい）
+  return new Response(ar.body, {
+    status: 200,
+    headers: {
+      "content-type": "text/event-stream; charset=utf-8",
+      "cache-control": "no-cache",
+      "x-accel-buffering": "no",
+    },
+  });
+};
+
+function j(obj, status) {
+  return new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json" } });
+}    return j({ error: "認証エラー" }, 401);
+  }
+  if (ALLOWED.length && !ALLOWED.includes(email)) {
+    return j({ error: "このアカウントは利用を許可されていません。" }, 403);
+  }
+
+  // --- Anthropic へ中継（ストリーミング）---
+  let body;
+  try { body = await req.json(); } catch (_) { return j({ error: "invalid body" }, 400); }
+  const payload = {
+    model: typeof body.model === "string" ? body.model : MODEL_DEFAULT,
+    max_tokens: Number(body.max_tokens) || 1024,
+    messages: Array.isArray(body.messages) ? body.messages : [],
+    stream: true,
+  };
+  if (body.system) payload.system = body.system;
 
   let ar;
   try {
