@@ -572,15 +572,16 @@ async function analyze(){
   analyzeBtn.disabled=true;
   const setLoad=m=>output.innerHTML='<div class="loading"><div class="spin"></div>'+m+'</div>';
   try{
-    const chunks=[];const P=pages.length;let diag={raw:'',stop:'',parsed:false};let meta={},imgs=[];
+    const chunks=[];const P=pages.length;let diag={raw:'',stop:'',parsed:false};let meta={},imgs=[];let incomplete=false;
     const takeMeta=m=>{if(m&&!meta.title&&(m.title||m.deck||m.byline||m.source))meta=m;};
     for(let p=0;p<P;p++){
       const page=pages[p];const {w,h}=await imgSize(page.dataUrl);const ratio=h/Math.max(1,w);
       let N=ratio<=1.7?1:Math.min(6,Math.ceil(ratio/1.3));
       const tag=P>1?(p+1)+'/'+P+'ページ ':'';
       if(N===1){setLoad(tag+'読み取り中…');const r=await readSlice(page.b64,page.mime);diag=r;
-        if(r.truncated&&!r.marked)N=2;else{chunks.push({marked:r.marked,items:r.items});takeMeta(r.meta);continue;}}
-      for(let i=0;i<N;i++){setLoad(tag+'分割読み取り中… ('+(i+1)+'/'+N+')');const b=await sliceImage(page.dataUrl,i,N);const r=await readSlice(b,'image/jpeg');diag=r;chunks.push({marked:r.marked,items:r.items});takeMeta(r.meta);}
+        if(r.stop!=='end_turn'){N=Math.min(6,Math.max(2,Math.ceil(ratio/0.85)+1));}
+        else{chunks.push({marked:r.marked,items:r.items});takeMeta(r.meta);continue;}}
+      for(let i=0;i<N;i++){setLoad(tag+'分割読み取り中… ('+(i+1)+'/'+N+')');const b=await sliceImage(page.dataUrl,i,N);const r=await readSlice(b,'image/jpeg');diag=r;if(r.stop&&r.stop!=='end_turn')incomplete=true;chunks.push({marked:r.marked,items:r.items});takeMeta(r.meta);}
     }
     const merged=chunks.length>1?mergeSlices(chunks):(chunks[0]||{marked:'',items:[]});
     merged.marked=(merged.marked||'').replace(/\*/g,'');
@@ -605,6 +606,7 @@ async function analyze(){
       return;
     }
     renderReview();
+    if(incomplete){const w=document.createElement('div');w.className='banner';w.style.cssText='margin-bottom:12px';w.innerHTML='⚠ 通信が途中で切れたため、一部しか読み取れていない可能性があります。<b>社外ネットワーク（iPhoneのテザリング等）</b>でもう一度お試しいただくと、全体を取得できることがあります。';if(output.firstChild)output.insertBefore(w,output.firstChild);else output.appendChild(w);}
   }catch(err){console.error(err);output.innerHTML='<div class="error">読み取りに失敗しました。キーが正しいか、画像が鮮明かを確認してください。<br><small>'+esc(err.message||'')+'</small></div>';}
   finally{analyzeBtn.disabled=false;}
 }
