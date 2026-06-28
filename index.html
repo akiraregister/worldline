@@ -18,13 +18,13 @@
   :root{--paper:#ECEEEC;--card:#FFFFFF;--ink:#1E222B;--muted:#6B7280;--line:#E3E6E4;--accent:#2F54D8;--accent-soft:#EEF1FE;--accent-line:#DAE0FB;--mark:#FFE15D;--mark-on:rgba(255,225,93,.92);--mark-soft:rgba(255,225,93,0);--mark-solid:rgba(255,221,84,.8);--note-solid:rgba(126,194,255,.6);--danger:#C0413D;--danger-soft:#FCEFEF;--ok:#2F8F5B;--ok-soft:#EAF6EF;}
   *{box-sizing:border-box}html,body{margin:0;padding:0}
   body{background:var(--paper);color:var(--ink);font-family:Inter,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;-webkit-font-smoothing:antialiased;line-height:1.6}
-  .wrap{max-width:780px;margin:0 auto;padding:34px 22px 110px}
-  .top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+  .wrap{max-width:780px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 68px) 22px 110px}
+  .top{position:fixed;left:0;right:0;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0;background:rgba(236,238,236,.9);-webkit-backdrop-filter:saturate(1.3) blur(12px);backdrop-filter:saturate(1.3) blur(12px);border-bottom:1px solid var(--line);padding:calc(env(safe-area-inset-top) + 9px) 22px 9px}
   .brand{font-family:Newsreader,serif;font-weight:600;font-size:30px;letter-spacing:-.01em;margin:0;display:inline-flex;align-items:center;gap:10px}
   .brand .bmark{width:34px;height:34px;border-radius:9px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.08);flex:none}
   .brand .bmark svg{display:block;width:100%;height:100%}
   .brand .hl{background:linear-gradient(101deg,var(--mark-soft) 1%,var(--mark-on) 4%,var(--mark-on) 96%,var(--mark-soft) 99%);padding:0 .12em;border-radius:.35em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-  .top .meta{color:var(--muted);font-size:13px}
+  .top .meta{color:var(--muted);font-size:12.5px;white-space:nowrap}
   nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;margin:0;background:rgba(248,249,248,.94);-webkit-backdrop-filter:saturate(1.3) blur(12px);backdrop-filter:saturate(1.3) blur(12px);border:none;border-top:1px solid var(--line);border-radius:0;padding:7px 6px calc(6px + env(safe-area-inset-bottom))}
   nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:inherit;font-size:10.5px;font-weight:600;color:var(--muted);background:transparent;border:none;border-radius:0;padding:6px 2px 2px;cursor:pointer;position:relative;transition:color .15s}
   nav button svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
@@ -218,12 +218,16 @@
   .set{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px}.set h3{margin:0 0 4px;font-size:16px}.set p{margin:0 0 14px;color:var(--muted);font-size:13.5px}
   .keyrow{display:flex;gap:10px;flex-wrap:wrap}.keyrow input{flex:1;min-width:200px;font-family:inherit;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:11px 13px}.keyrow input:focus{outline:none;border-color:var(--accent)}
   .ok-tag{color:var(--ok);font-size:13px;font-weight:600}
-  .homehero{text-align:center;padding:14px 0 2px}
-  .hh-w2w{display:inline-flex;flex-direction:column;align-items:center}
-  .hh-word{font-family:Newsreader,serif;font-size:13px;color:var(--muted)}
-  .hh-bar{width:1.5px;height:11px;background:var(--ink);opacity:.22;margin:2px 0}
-  .hh-world{font-family:Newsreader,serif;font-weight:600;font-size:34px;color:var(--ink);letter-spacing:-.01em;background:linear-gradient(transparent 58%, var(--mark) 58%, var(--mark) 84%, transparent 84%);padding:0 .14em;border-radius:.1em}
-  .hh-tag{font-family:Newsreader,serif;font-size:15px;color:var(--ink);margin-top:10px}
+  .homehero{text-align:center;padding:18px 0 2px}
+  .hh-world{font-family:Newsreader,serif;font-weight:600;font-size:44px;color:var(--ink);letter-spacing:-.01em;white-space:nowrap}
+  .hh-lslot{display:inline-block;width:0;position:relative;text-align:center;animation:lSlot 5.2s ease-in-out infinite}
+  .hh-lchar{display:inline-block;opacity:0;animation:lChar 5.2s ease-in-out infinite}
+  .hh-lmark{position:absolute;left:50%;top:50%;width:.5em;height:1.18em;transform:translate(-50%,-50%) rotate(-3deg);background:var(--mark);border-radius:.13em;mix-blend-mode:multiply;clip-path:inset(0 0 100% 0);animation:lMark 5.2s ease-in-out infinite;pointer-events:none}
+  @keyframes lSlot{0%,12%{width:0}34%,82%{width:.34em}100%{width:0}}
+  @keyframes lChar{0%,14%{opacity:0}32%,84%{opacity:1}96%,100%{opacity:0}}
+  @keyframes lMark{0%,35%{clip-path:inset(0 0 100% 0)}54%,80%{clip-path:inset(0 0 0 0)}95%,100%{clip-path:inset(0 0 100% 0)}}
+  @media(prefers-reduced-motion:reduce){.hh-lslot{width:.34em;animation:none}.hh-lchar{opacity:1;animation:none}.hh-lmark{clip-path:none;animation:none}}
+  .hh-tag{font-family:Newsreader,serif;font-size:15px;color:var(--ink);margin-top:5px}
   .homehint{background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);border-radius:12px;padding:11px 14px;font-size:13px;font-weight:600;margin:16px 0 0;cursor:pointer;line-height:1.5}
   .homestats{display:flex;gap:10px;margin:18px 0}
   .stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 8px;text-align:center}
@@ -247,7 +251,7 @@
   .advsec{padding:16px 0;border-top:1px solid var(--line)}
   .advsec h3{margin:0 0 4px;font-size:15px}.advsec p{margin:0 0 12px;color:var(--muted);font-size:13px;line-height:1.6}
   a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-  @media(max-width:520px){.brand{font-size:26px}.qword{font-size:24px}.wrap{padding:24px 16px calc(120px + env(safe-area-inset-bottom))}.passage{padding:20px}}
+  @media(max-width:520px){.brand{font-size:26px}.qword{font-size:24px}.wrap{padding:calc(env(safe-area-inset-top) + 60px) 16px calc(120px + env(safe-area-inset-bottom))}.passage{padding:20px}.top{padding-left:16px;padding-right:16px}.hh-world{font-size:38px}}
 </style>
 </head>
 <body>
@@ -261,7 +265,7 @@
     <button data-tab="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.6v2.6M12 18.8v2.6M21.4 12h-2.6M5.2 12H2.6M18.6 5.4l-1.8 1.8M7.2 16.8l-1.8 1.8M18.6 18.6l-1.8-1.8M7.2 7.2 5.4 5.4"/></svg>設定</button>
   </nav>
   <section id="tab-home">
-    <div class="homehero"><div class="hh-w2w"><span class="hh-word">word</span><span class="hh-bar"></span><span class="hh-world">world</span></div><div class="hh-tag">単語に一本、世界に一歩。</div></div>
+    <div class="homehero"><div class="hh-world">wor<span class="hh-lslot"><span class="hh-lmark"></span><span class="hh-lchar">l</span></span>d</div><div class="hh-tag">単語に一本、世界に一歩。</div></div>
     <div id="homeHint" class="homehint" data-tab="settings" style="display:none">⚠ 読み取りにはAPIキーの登録が必要です。設定 →「詳細設定」から登録してください。</div>
     <div id="homeStats" class="homestats"></div>
     <div class="homecard"><div class="hc-lab">クラウド同期</div><div id="acctBody"></div></div>
@@ -274,9 +278,7 @@
   </section>
   <section id="tab-capture" class="hidden">
     <div id="drop" class="drop">
-      <div class="w2w"><span class="w2w-word">word</span><span class="w2w-bar"></span><span class="w2w-world">world</span>
-        <svg class="w2w-stroke" viewBox="0 0 160 20" aria-hidden="true"><path d="M10 12 C 50 6, 108 6, 140 10" stroke="#FFE15D" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="147" cy="10" r="4.5" fill="#2F54D8"/></svg>
-      </div>
+      <div class="w2w"><div class="hh-world" style="font-size:38px">wor<span class="hh-lslot"><span class="hh-lmark"></span><span class="hh-lchar">l</span></span>d</div></div>
       <div class="big">単語に一本、世界に一歩。</div>
       <div class="sub">スクショをドロップ / タップで選択 / 貼り付け。出会った単語がここに集まります。長文・複数ページ・紙/Web/Kindle/PDFもまとめてOK。</div></div>
     <input type="file" id="file" accept="image/*" multiple>
