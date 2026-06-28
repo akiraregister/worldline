@@ -1,0 +1,10 @@
+# Wordline は静的な単一ページです。ビルド工程はありません。
+[build]
+  publish = "."
+
+# 任意: 軽いセキュリティヘッダ
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

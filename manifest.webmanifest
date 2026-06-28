@@ -1,0 +1,18 @@
+{
+  "name": "Wordline",
+  "short_name": "Wordline",
+  "description": "ハイライトした英文記事から、単語帳と気づきメモをつくる。",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ECEEEC",
+  "theme_color": "#ECEEEC",
+  "icons": [
+    { "src": "wordline-icon-fullbleed-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "wordline-icon-fullbleed-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "wordline-icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "wordline-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
