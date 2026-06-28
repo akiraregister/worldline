@@ -218,6 +218,34 @@
   .set{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px}.set h3{margin:0 0 4px;font-size:16px}.set p{margin:0 0 14px;color:var(--muted);font-size:13.5px}
   .keyrow{display:flex;gap:10px;flex-wrap:wrap}.keyrow input{flex:1;min-width:200px;font-family:inherit;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:11px 13px}.keyrow input:focus{outline:none;border-color:var(--accent)}
   .ok-tag{color:var(--ok);font-size:13px;font-weight:600}
+  .homehero{text-align:center;padding:14px 0 2px}
+  .hh-w2w{display:inline-flex;flex-direction:column;align-items:center}
+  .hh-word{font-family:Newsreader,serif;font-size:13px;color:var(--muted)}
+  .hh-bar{width:1.5px;height:11px;background:var(--ink);opacity:.22;margin:2px 0}
+  .hh-world{font-family:Newsreader,serif;font-weight:600;font-size:34px;color:var(--ink);letter-spacing:-.01em;background:linear-gradient(transparent 58%, var(--mark) 58%, var(--mark) 84%, transparent 84%);padding:0 .14em;border-radius:.1em}
+  .hh-tag{font-family:Newsreader,serif;font-size:15px;color:var(--ink);margin-top:10px}
+  .homehint{background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);border-radius:12px;padding:11px 14px;font-size:13px;font-weight:600;margin:16px 0 0;cursor:pointer;line-height:1.5}
+  .homestats{display:flex;gap:10px;margin:18px 0}
+  .stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 8px;text-align:center}
+  .stat .n{font-family:Newsreader,serif;font-size:26px;font-weight:600;line-height:1}
+  .stat .l{font-size:11.5px;color:var(--muted);margin-top:5px}
+  .homecard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+  .hc-lab{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+  .homemenu{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .menucard{display:flex;flex-direction:column;align-items:flex-start;text-align:left;font-family:inherit;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;transition:.15s}
+  .menucard:hover{border-color:var(--accent)}.menucard:active{transform:translateY(1px)}
+  .menucard .mc-ic{color:var(--accent);margin-bottom:8px;line-height:0}
+  .menucard .mc-ic svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .menucard .mc-t{font-weight:600;font-size:15px;color:var(--ink)}
+  .menucard .mc-s{font-size:12px;color:var(--muted);margin-top:1px}
+  .set.adv{padding:16px 18px}
+  .advsum{cursor:pointer;font-weight:600;font-size:15px;list-style:none;outline:none}
+  .advsum::-webkit-details-marker{display:none}
+  .advsum::before{content:"▸";color:var(--muted);margin-right:8px;font-size:12px}
+  details[open] .advsum::before{content:"▾"}
+  .advbody{margin-top:6px}
+  .advsec{padding:16px 0;border-top:1px solid var(--line)}
+  .advsec h3{margin:0 0 4px;font-size:15px}.advsec p{margin:0 0 12px;color:var(--muted);font-size:13px;line-height:1.6}
   a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
   @media(max-width:520px){.brand{font-size:26px}.qword{font-size:24px}.wrap{padding:24px 16px calc(120px + env(safe-area-inset-bottom))}.passage{padding:20px}}
 </style>
@@ -226,12 +254,25 @@
 <div class="wrap">
   <div class="top"><h1 class="brand"><span class="bmark"><svg viewBox="0 0 120 120" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" fill="#ECEEEC"/><rect x="69" y="34" width="18" height="40" rx="4" fill="#FFE15D" fill-opacity="0.92" transform="rotate(-2 78 54)"/><text x="22" y="73" font-family="Newsreader, Georgia, serif" font-size="31" font-weight="600" fill="#1E222B">world</text></svg></span>Wordline</h1><span class="meta" id="metaCount"></span></div>
   <nav>
-    <button data-tab="capture" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><line x1="7.5" y1="12" x2="16.5" y2="12"/></svg>読み取り</button>
+    <button data-tab="home" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.2 11.8 12 4l8.8 7.8"/><path d="M5.2 10.2V19a1 1 0 0 0 1 1H10v-5h4v5h3.8a1 1 0 0 0 1-1v-8.8"/></svg>ホーム</button>
+    <button data-tab="capture"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><line x1="7.5" y1="12" x2="16.5" y2="12"/></svg>読み取り</button>
     <button data-tab="library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.5 7.5 12 12l9.5-4.5L12 3Z"/><path d="m2.5 12 9.5 4.5L21.5 12"/><path d="m2.5 16.5 9.5 4.5 9.5-4.5"/></svg>ストック</button>
     <button data-tab="test"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="m8 12 2.6 2.6L16 9"/></svg>テスト</button>
     <button data-tab="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.6v2.6M12 18.8v2.6M21.4 12h-2.6M5.2 12H2.6M18.6 5.4l-1.8 1.8M7.2 16.8l-1.8 1.8M18.6 18.6l-1.8-1.8M7.2 7.2 5.4 5.4"/></svg>設定</button>
   </nav>
-  <section id="tab-capture">
+  <section id="tab-home">
+    <div class="homehero"><div class="hh-w2w"><span class="hh-word">word</span><span class="hh-bar"></span><span class="hh-world">world</span></div><div class="hh-tag">単語に一本、世界に一歩。</div></div>
+    <div id="homeHint" class="homehint" data-tab="settings" style="display:none">⚠ 読み取りにはAPIキーの登録が必要です。設定 →「詳細設定」から登録してください。</div>
+    <div id="homeStats" class="homestats"></div>
+    <div class="homecard"><div class="hc-lab">クラウド同期</div><div id="acctBody"></div></div>
+    <div class="homemenu">
+      <button class="menucard" data-tab="capture"><span class="mc-ic"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><line x1="7.5" y1="12" x2="16.5" y2="12"/></svg></span><span class="mc-t">読み取り</span><span class="mc-s">記事を読み込む</span></button>
+      <button class="menucard" data-tab="library"><span class="mc-ic"><svg viewBox="0 0 24 24"><path d="M12 3 2.5 7.5 12 12l9.5-4.5L12 3Z"/><path d="m2.5 12 9.5 4.5L21.5 12"/><path d="m2.5 16.5 9.5 4.5 9.5-4.5"/></svg></span><span class="mc-t">ストック</span><span class="mc-s">単語・メモを見る</span></button>
+      <button class="menucard" data-tab="test"><span class="mc-ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="m8 12 2.6 2.6L16 9"/></svg></span><span class="mc-t">テスト</span><span class="mc-s">4択で復習する</span></button>
+      <button class="menucard" data-tab="settings"><span class="mc-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.6v2.6M12 18.8v2.6M21.4 12h-2.6M5.2 12H2.6M18.6 5.4l-1.8 1.8M7.2 16.8l-1.8 1.8M18.6 18.6l-1.8-1.8M7.2 7.2 5.4 5.4"/></svg></span><span class="mc-t">設定</span><span class="mc-s">API・同期・バックアップ</span></button>
+    </div>
+  </section>
+  <section id="tab-capture" class="hidden">
     <div id="drop" class="drop">
       <div class="w2w"><span class="w2w-word">word</span><span class="w2w-bar"></span><span class="w2w-world">world</span>
         <svg class="w2w-stroke" viewBox="0 0 160 20" aria-hidden="true"><path d="M10 12 C 50 6, 108 6, 140 10" stroke="#FFE15D" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="147" cy="10" r="4.5" fill="#2F54D8"/></svg>
@@ -246,23 +287,23 @@
   <section id="tab-library" class="hidden"><div id="libBody"></div></section>
   <section id="tab-test" class="hidden"><div id="testBody"></div></section>
   <section id="tab-settings" class="hidden">
-    <div class="set"><h3>Anthropic APIキー</h3>
-      <p>読み取りと単語追加に使います。キーはこの端末内にのみ保存され、外部には送られません。
-        <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">キーを取得</a></p>
-      <div class="keyrow"><input type="password" id="apiKeyInput" placeholder="sk-ant-..."><button class="btn" id="saveKey">保存</button></div>
-      <div id="keyStatus" style="margin-top:10px"></div></div>
-    <div class="set" id="acctSet"><h3>アカウント（クラウド同期）</h3>
-      <p>Googleでログインすると、単語・メモが自分のクラウドにバックアップされ、iPhone・iPad など別の端末でも同じデータを使えます。<br>利用には自分の Firebase プロジェクト（無料）が必要です。<a href="https://console.firebase.google.com/" target="_blank" rel="noopener">Firebase を開く</a></p>
-      <div id="acctBody"></div>
-      <details id="fbConfigWrap" style="margin-top:14px"><summary style="cursor:pointer;font-weight:600;font-size:13.5px;color:var(--muted)">Firebase 設定（初回のみ・上級）</summary>
-        <p class="note-c" style="margin:10px 0 6px">手順: ① Firebase でプロジェクト作成 → ② Authentication で Google ログインを有効化 → ③ Firestore Database を作成 → ④ ウェブアプリを追加して <b>firebaseConfig</b> をコピー → 下に貼り付けて保存。⑤ Authentication の「承認済みドメイン」に、デプロイ先（Netlify）のドメインを追加してください。</p>
-        <textarea id="fbConfigInput" class="efield" rows="7" placeholder='{&#10;  "apiKey": "...",&#10;  "authDomain": "xxxx.firebaseapp.com",&#10;  "projectId": "xxxx",&#10;  "appId": "..."&#10;}'></textarea>
-        <div class="row" style="margin-top:8px"><button class="btn ghost sm" id="fbConfigSave">設定を保存</button><span id="fbConfigStatus" class="note-c"></span></div>
-      </details></div>
-    <div class="set"><h3>バックアップ</h3><p>データは端末内に保存されます。書き出し/取り込みで、別端末への移行や復元ができます。</p>
-      <div class="row" style="margin-top:0"><button class="btn ghost sm" id="exportBtn">JSONで書き出す</button><button class="btn ghost sm" id="importBtn">JSONを取り込む</button></div>
-      <input type="file" id="importFile" accept="application/json,.json">
-      <div id="importStatus" style="margin-top:10px"></div></div>
+    <details class="set adv"><summary class="advsum">詳細設定（APIキー・クラウド同期・バックアップ）</summary>
+      <div class="advbody">
+        <div class="advsec"><h3>Anthropic APIキー</h3>
+          <p>読み取りと単語追加に使います。キーはこの端末内にのみ保存され、外部には送られません。<a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">キーを取得</a></p>
+          <div class="keyrow"><input type="password" id="apiKeyInput" placeholder="sk-ant-..."><button class="btn" id="saveKey">保存</button></div>
+          <div id="keyStatus" style="margin-top:10px"></div></div>
+        <div class="advsec"><h3>クラウド同期（Firebase 設定）</h3>
+          <p>Googleログイン自体は<b>ホーム画面</b>から行えます。ここでは初回のみ、Firebase の <b>firebaseConfig</b>（JSON）を貼り付けて保存します。<a href="https://console.firebase.google.com/" target="_blank" rel="noopener">Firebase を開く</a></p>
+          <p class="note-c" style="margin:0 0 8px">手順: ① Firebase でプロジェクト作成 → ② Authentication で Google を有効化 → ③ Firestore を作成 → ④ ウェブアプリを追加して firebaseConfig をコピー → 下に貼り付け保存 → ⑤ Authentication の「承認済みドメイン」にこのサイトのドメインを追加。</p>
+          <textarea id="fbConfigInput" class="efield" rows="7" placeholder='{&#10;  "apiKey": "...",&#10;  "authDomain": "xxxx.firebaseapp.com",&#10;  "projectId": "xxxx",&#10;  "appId": "..."&#10;}'></textarea>
+          <div class="row" style="margin-top:8px"><button class="btn ghost sm" id="fbConfigSave">設定を保存</button><span id="fbConfigStatus" class="note-c"></span></div></div>
+        <div class="advsec"><h3>バックアップ</h3><p>データは端末内に保存されます。書き出し/取り込みで、別端末への移行や復元ができます。</p>
+          <div class="row" style="margin-top:0"><button class="btn ghost sm" id="exportBtn">JSONで書き出す</button><button class="btn ghost sm" id="importBtn">JSONを取り込む</button></div>
+          <input type="file" id="importFile" accept="application/json,.json">
+          <div id="importStatus" style="margin-top:10px"></div></div>
+      </div>
+    </details>
   </section>
 </div>
 
@@ -329,9 +370,18 @@ function mergeNotes(items,clean){
 }
 
 /* ===== tabs ===== */
-const tabs=['capture','library','test','settings'];
+const tabs=['home','capture','library','test','settings'];
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
-function switchTab(t){closePop();document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));tabs.forEach(x=>document.getElementById('tab-'+x).classList.toggle('hidden',x!==t));if(t==='library')renderLibrary();if(t==='test')renderTestHome();}
+document.querySelectorAll('#tab-home [data-tab]').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+function switchTab(t){closePop();document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));tabs.forEach(x=>document.getElementById('tab-'+x).classList.toggle('hidden',x!==t));if(t==='home')renderHome();if(t==='library')renderLibrary();if(t==='test')renderTestHome();}
+async function renderHome(){
+  try{const w=await getAll('words'),n=await getAll('notes'),a=await getAll('archives');
+    const st=document.getElementById('homeStats');
+    if(st)st.innerHTML='<div class="stat"><div class="n">'+a.length+'</div><div class="l">記事</div></div><div class="stat"><div class="n">'+w.length+'</div><div class="l">単語</div></div><div class="stat"><div class="n">'+n.length+'</div><div class="l">メモ</div></div>';
+    const hint=document.getElementById('homeHint');if(hint){const key=await getKey();hint.style.display=key?'none':'block';}
+  }catch(_){}
+  if(typeof renderAccount==='function')renderAccount();
+}
 
 /* ===== popover / toast ===== */
 let popEl=null;
@@ -876,12 +926,17 @@ async function loadFirebase(cfg){
   const app=appMod.initializeApp(cfg), auth=authMod.getAuth(app), dbf=fsMod.getFirestore(app);
   _fb={app,auth,dbf,authMod,fsMod};
   authMod.onAuthStateChanged(auth,u=>{_fbUser=u;renderAccount();if(u)syncNow().catch(()=>{});});
+  try{authMod.getRedirectResult(auth).catch(e=>{if(e&&e.code&&e.code.indexOf('popup')<0)console.warn('redirect',e);});}catch(_){}
   return _fb;
 }
 async function initCloud(){const cfg=await getFbConfig();if(!cfg)return;try{await loadFirebase(cfg);}catch(e){console.warn('cloud init',e);}}
 async function signInGoogle(){const cfg=await getFbConfig();if(!cfg){alert('先に Firebase 設定を保存してください。');return;}
-  try{await loadFirebase(cfg);const {GoogleAuthProvider,signInWithPopup}=_fb.authMod;await signInWithPopup(_fb.auth,new GoogleAuthProvider());}
-  catch(e){alert('ログインに失敗しました: '+((e&&e.message)||e));}}
+  try{await loadFirebase(cfg);const {GoogleAuthProvider,signInWithPopup,signInWithRedirect}=_fb.authMod;const provider=new GoogleAuthProvider();
+    try{await signInWithPopup(_fb.auth,provider);}
+    catch(e){const c=(e&&e.code)||'';
+      if(c.indexOf('popup')>=0||c.indexOf('cancelled')>=0||c.indexOf('operation-not-supported')>=0){await signInWithRedirect(_fb.auth,provider);}
+      else throw e;}
+  }catch(e){alert('ログインに失敗しました: '+((e&&e.message)||e));}}
 async function signOutCloud(){if(_fb){try{await _fb.authMod.signOut(_fb.auth);}catch(_){}}}
 function userDoc(name,id){const {doc}=_fb.fsMod;return doc(_fb.dbf,'users',_fbUser.uid,name,id);}
 function userCol(name){const {collection}=_fb.fsMod;return collection(_fb.dbf,'users',_fbUser.uid,name);}
@@ -907,7 +962,7 @@ async function renderAccount(){
   const body=document.getElementById('acctBody');if(!body)return;
   const cfg=await getFbConfig();
   const ci=document.getElementById('fbConfigInput');if(ci&&cfg&&!ci.value)ci.value=JSON.stringify(cfg,null,2);
-  if(!cfg){body.innerHTML='<div class="note-c">クラウド同期は未設定です。下の「Firebase 設定」を開いて開始してください。</div>';return;}
+  if(!cfg){body.innerHTML='<div class="note-c">Googleでログインすると、単語・メモが別端末と同期されます。初回のみ <b>設定 →「詳細設定」→ クラウド同期</b> で Firebase 設定が必要です。</div>';return;}
   if(!_fbUser){body.innerHTML='<button class="btn" id="acctLogin">Googleでログイン</button><div class="note-c" style="margin-top:8px">※ ログインすると、この端末のデータがクラウドへバックアップされ、他端末と同期されます。</div>';
     const b=document.getElementById('acctLogin');if(b)b.addEventListener('click',signInGoogle);return;}
   body.innerHTML='<div><span class="ok-tag">✓ '+esc(_fbUser.email||_fbUser.displayName||'ログイン中')+'</span></div>'+
@@ -928,7 +983,7 @@ async function renderAccount(){
 })();
 
 async function refreshMeta(){const w=await getAll('words'),n=await getAll('notes'),a=await getAll('archives');document.getElementById('metaCount').textContent=a.length+' 記事 · '+w.length+' 語 · '+n.length+' メモ';}
-(async function init(){try{await db();await loadReaderPref();await refreshMeta();const k=await getKey();if(k)document.getElementById('keyStatus').innerHTML='<span class="ok-tag">✓ キー登録済み</span>';renderAccount();initCloud();}catch(e){document.getElementById('output').innerHTML='<div class="error">この環境ではデータ保存（IndexedDB）が使えません。Netlify等にデプロイしてご利用ください。</div>';}})();
+(async function init(){try{await db();await loadReaderPref();await refreshMeta();const k=await getKey();if(k)document.getElementById('keyStatus').innerHTML='<span class="ok-tag">✓ キー登録済み</span>';renderHome();initCloud();}catch(e){document.getElementById('output').innerHTML='<div class="error">この環境ではデータ保存（IndexedDB）が使えません。Netlify等にデプロイしてご利用ください。</div>';}})();
 </script>
 </body>
 </html>
